@@ -1,0 +1,21 @@
+{
+  "full_name": "Victor",
+  "name": "Victor",
+  "current_role": "Fullstack Developer / AI Engineer",
+  "location": "Remote",
+  "email": "victor@example.com",
+  "linkedin": "https://www.linkedin.com/in/victorConqueror",
+  "specialties": [
+    "Fullstack product development (APIs, data models, UIs)",
+    "LLMs, agents, and AI tooling for production reliability",
+    "Frameworks, side projects, and explaining technical ideas clearly"
+  ],
+  "years_experience": 8,
+  "education": [
+    {
+      "degree": "B.S. Computer Science",
+      "institution": "Your university",
+      "year": "Your graduation year"
+    }
+  ]
+}
