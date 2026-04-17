@@ -6,8 +6,16 @@ PROJECT_NAME=${2:-twin}
 
 echo "🚀 Deploying ${PROJECT_NAME} to ${ENVIRONMENT}..."
 
-# 1. Build Lambda package
+# 0. Load .env and export Terraform variables
 cd "$(dirname "$0")/.."        # project root
+if [ -f .env ]; then
+  set -a
+  source .env
+  set +a
+fi
+export TF_VAR_openai_api_key="${TF_VAR_openai_api_key:-$OPENAI_API_KEY}"
+
+# 1. Build Lambda package
 echo "📦 Building Lambda package..."
 (cd backend && uv run deploy.py)
 
