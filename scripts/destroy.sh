@@ -15,8 +15,16 @@ PROJECT_NAME=${2:-twin}
 
 echo "🗑️ Preparing to destroy ${PROJECT_NAME}-${ENVIRONMENT} infrastructure..."
 
+# Load .env variables
+cd "$(dirname "$0")/.."
+if [ -f .env ]; then
+  set -a
+  source .env
+  set +a
+fi
+
 # Navigate to terraform directory
-cd "$(dirname "$0")/../terraform"
+cd terraform
 
 # Get AWS Account ID and Region for backend configuration
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -74,9 +82,9 @@ fi
 
 # Run terraform destroy with auto-approve
 if [ "$ENVIRONMENT" = "prod" ] && [ -f "prod.tfvars" ]; then
-    terraform destroy -var-file=prod.tfvars -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -auto-approve
+    terraform destroy -var-file=prod.tfvars -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -var="openai_api_key=$OPENAI_API_KEY" -auto-approve
 else
-    terraform destroy -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -auto-approve
+    terraform destroy -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -var="openai_api_key=$OPENAI_API_KEY" -auto-approve
 fi
 
 echo "✅ Infrastructure for ${ENVIRONMENT} has been destroyed!"

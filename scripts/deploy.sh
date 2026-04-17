@@ -6,14 +6,13 @@ PROJECT_NAME=${2:-twin}
 
 echo "🚀 Deploying ${PROJECT_NAME} to ${ENVIRONMENT}..."
 
-# 0. Load .env and export Terraform variables
+# 0. Load .env variables
 cd "$(dirname "$0")/.."        # project root
 if [ -f .env ]; then
   set -a
   source .env
   set +a
 fi
-export TF_VAR_openai_api_key="${TF_VAR_openai_api_key:-$OPENAI_API_KEY}"
 
 # 1. Build Lambda package
 echo "📦 Building Lambda package..."
@@ -38,9 +37,9 @@ fi
 
 # Use prod.tfvars for production environment
 if [ "$ENVIRONMENT" = "prod" ]; then
-  TF_APPLY_CMD=(terraform apply -var-file=prod.tfvars -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -auto-approve)
+  TF_APPLY_CMD=(terraform apply -var-file=prod.tfvars -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -var="openai_api_key=$OPENAI_API_KEY" -auto-approve)
 else
-  TF_APPLY_CMD=(terraform apply -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -auto-approve)
+  TF_APPLY_CMD=(terraform apply -var="project_name=$PROJECT_NAME" -var="environment=$ENVIRONMENT" -var="openai_api_key=$OPENAI_API_KEY" -auto-approve)
 fi
 
 echo "🎯 Applying Terraform..."
